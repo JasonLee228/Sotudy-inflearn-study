@@ -9,7 +9,9 @@ public class MemberApp {
 
     public static void main(String[] args) {
 
-        MemberService memberService = new MemberServiceImpl();
+//        MemberService memberService = new MemberServiceImpl(); // 사용에도 더이상 객체 생성을 할 필요 없음.
+        AppConfig appConfig = new AppConfig();
+        MemberService memberService = appConfig.memberService();// -> appconfig를 통해서 전달받음
 
         Member member = new Member(1L, "changeun", Grade.VIP);
 

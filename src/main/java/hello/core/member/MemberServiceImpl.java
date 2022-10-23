@@ -2,10 +2,12 @@ package hello.core.member;
 
 public class MemberServiceImpl implements MemberService{
 
-    private final MemberRepository memberRepository = new MemoryMemberRepository();
-    // MemberServiceImpl 는 인터페이스인 MemberRepository 를 의존하고 있다. (추상화에 의존)
-    // 그런데, 그 구현체인 MemoryMemberRepository 에도 의존하고 있음.(구체화에 의존)
-    // 결론적으로, 변경에 취약함. -> DIP 위반
+    private final MemberRepository memberRepository;
+
+    // 구현체를 생성자를 통해서 주입해준다 -> 클라이언트 클래스(MemberServiceImpl) 는 인터페이스만 의존할 수 있게 해준다.(DIP 준수, 관심사의 분리)
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public void join(Member member) {
