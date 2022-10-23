@@ -1,6 +1,8 @@
 package hello.core;
 
+import hello.core.discount.DiscountPolicy;
 import hello.core.discount.FixDiscountPolicy;
+import hello.core.member.MemberRepository;
 import hello.core.member.MemberService;
 import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
@@ -16,11 +18,25 @@ public class AppConfig {
 
     public MemberService memberService() {
         // 생성자를 통해 구현체 주입
-        return new MemberServiceImpl(new MemoryMemberRepository());
+        return new MemberServiceImpl(memberRepository());
+    }
+
+    // 중복의 제거를 위해서 개별 생성을 따로 뺐다.
+    private static MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
     }
 
     public OrderService orderService() {
-        return new OrderServiceImpl(new MemoryMemberRepository(), new FixDiscountPolicy());
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
+
+    public DiscountPolicy discountPolicy() {
+        return new FixDiscountPolicy();
+
+    }
+
+    /**
+     * AppConfig 를 보면, 설계상의 역할과 구현이 어떻게 되어 있는지 명확하게 알 수 있다.
+     * */
 
 }
