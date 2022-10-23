@@ -15,7 +15,12 @@ import hello.core.order.OrderServiceImpl;
  *        구현체에서 직접 선택하여 주입하는 것이 아닌, 별도 클래스에서 필요 객체를 주입해 주자
  *        애플리케이션의 실제 동작에 필요한 구현 객체를 생성자를 통해 주입한다
  *        AppConfig : 애플리케이션을 사용 영역과, 구성(Configuration)하는 영역으로 분리됨
+ *        * 스프링에서의 DI 컨테이너 역할을 여기서 하고 있는 것.
  * */
+/**
+ * AppConfig 를 보면, 설계상의 역할과 구현이 어떻게 되어 있는지 명확하게 알 수 있다.
+ * */
+
 public class AppConfig {
 
     public MemberService memberService() {
@@ -37,9 +42,5 @@ public class AppConfig {
         return new RateDiscountPolicy(); // 정액 할인 정책에서 정률 할인 정책으로 변경 -> 단 한줄만 변경하면 돼!
                                          // 사용 영역을 변경하지 않고, 구성 영역의 변경만으로 정책 변경이 가능
     }
-
-    /**
-     * AppConfig 를 보면, 설계상의 역할과 구현이 어떻게 되어 있는지 명확하게 알 수 있다.
-     * */
 
 }
