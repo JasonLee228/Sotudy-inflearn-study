@@ -9,6 +9,8 @@ import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
 import hello.core.order.OrderService;
 import hello.core.order.OrderServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * TODO : 애플리케이션의 전체 동작 방식을 구성(config)하기 위해, 구현 객체를 생성하고, 연결하는 책임을 가지는 별도의 설정 클래스를 만들자
@@ -21,22 +23,27 @@ import hello.core.order.OrderServiceImpl;
  * AppConfig 를 보면, 설계상의 역할과 구현이 어떻게 되어 있는지 명확하게 알 수 있다.
  * */
 
+@Configuration
 public class AppConfig {
 
+    @Bean
     public MemberService memberService() {
         // 생성자를 통해 구현체 주입
         return new MemberServiceImpl(memberRepository());
     }
 
     // 중복의 제거를 위해서 개별 생성을 따로 뺐다.
+    @Bean
     private static MemberRepository memberRepository() {
         return new MemoryMemberRepository();
     }
 
+    @Bean
     public OrderService orderService() {
         return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
+    @Bean
     public DiscountPolicy discountPolicy() {
 //        return new FixDiscountPolicy();
         return new RateDiscountPolicy(); // 정액 할인 정책에서 정률 할인 정책으로 변경 -> 단 한줄만 변경하면 돼!
