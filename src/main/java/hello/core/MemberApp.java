@@ -18,6 +18,8 @@ public class MemberApp {
         // 스프링에서 빈을 등록하고 관리하는 방법. AnnotationConfigApplicationContext 클래스에서는 AppConfig 라는 구성 파일에 @Bean 이 붙은 클래스 구현 메소드들을 빈으로 등록.
         // 빈 등록 이름은 AppConfig 의 메소드 이름으로 등록됨.
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        // 스프링 컨테이너인 ApplicationContext 인터페이스를 AnnotationConfigApplicationContext 로서 구현, @Configuration 어노테이션을 통해 설정 클래스로 스프링 컨테이너를 등록한 것.
+
         // memberService 라는 빈 이름의 MemberService 라는 타입
         MemberService memberService = applicationContext.getBean("memberService", MemberService.class);
 

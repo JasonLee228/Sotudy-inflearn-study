@@ -26,13 +26,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
+    // 생성자를 통해 구현체 주입 어노테이션 기반의 스프링 컨테이너 설정
+
     @Bean
     public MemberService memberService() {
-        // 생성자를 통해 구현체 주입
         return new MemberServiceImpl(memberRepository());
     }
 
-    // 중복의 제거를 위해서 개별 생성을 따로 뺐다.
     @Bean
     private static MemberRepository memberRepository() {
         return new MemoryMemberRepository();
