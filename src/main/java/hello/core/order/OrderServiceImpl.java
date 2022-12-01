@@ -1,5 +1,6 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService{
     // final 키워드가 붙으면 초기 값 세팅 또는 생성자를 통해서만 값을 세팅할 수 있다.
     // final 키워드가 있기 때문에 값 세팅 여부 등을 확인할 수 있다.
     private final MemberRepository memberRepository;
+    @MainDiscountPolicy
     private final DiscountPolicy discountPolicy;
 
 /*
