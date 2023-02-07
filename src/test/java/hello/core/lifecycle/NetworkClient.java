@@ -3,7 +3,7 @@ package hello.core.lifecycle;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-public class NetworkClient implements InitializingBean, DisposableBean {
+public class NetworkClient {
     /**
      * 간단하게 외부 네트워크에 미리 연결하는 객체를 하나 생성한다고 가정해보자.
      * 실제로 네트워크에 연결하는 것은 아니고, 단순히 문자만 출력하도록 했다.
@@ -38,17 +38,15 @@ public class NetworkClient implements InitializingBean, DisposableBean {
     }
 
     // 의존관계 주입이 끝나면 호출
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("NetworkClient.afterPropertiesSet");
+    public void init() throws Exception {
+        System.out.println("NetworkClient.init");
         connect();
         call("초기화 연결 메시지");
     }
 
     // 빈 종료시 호출
-    @Override
-    public void destroy() throws Exception {
-        System.out.println("NetworkClient.destroy");
+    public void close() throws Exception {
+        System.out.println("NetworkClient.close");
         disconnect();
     }
 }
