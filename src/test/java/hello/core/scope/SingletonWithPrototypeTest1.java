@@ -1,6 +1,8 @@
 package hello.core.scope;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -47,16 +49,18 @@ public class SingletonWithPrototypeTest1 {
 
     @Scope("singleton")
     static class ClientBean {
-        private final PrototypeBean prototypeBean;
 
-        // 사용자가 호출할 때가 아닌 ClientBean 이 호출할 때가 생성 및 주입 시점인 것.
-        // 개발자의 의도 -> 사용자가 호출할 때마다 PrototypeBean 을 호출해주길 원한다.
+        // 스프링의 ObjectProvider 를 이용해서 항상 새로운 프로토타입 빈이 생성되도록 할 수 있다.
+        // DL(Dependency Lookup) 사용.
         @Autowired
-        ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+//        private ObjectFactory<PrototypeBean> prototypeBeanProvider; // 같은 기능 사용 가능
 
         public int logic() {
+
+            // 스프링 컨테이너 내부에서 해당 빈을 찾아서 반환해준다.
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+
             prototypeBean.addCount();
             return prototypeBean.getCount();
         }
