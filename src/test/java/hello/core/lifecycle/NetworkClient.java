@@ -46,7 +46,7 @@ public class NetworkClient {
     }
 
     // 빈 종료시 호출
-    @PreDestroy
+//    @PreDestroy // 선언 안해도 @Bean 에 의해 호출됨
     public void close() throws Exception {
         System.out.println("NetworkClient.close");
         disconnect();
