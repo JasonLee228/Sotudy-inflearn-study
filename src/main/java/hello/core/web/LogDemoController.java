@@ -2,7 +2,6 @@ package hello.core.web;
 
 import hello.core.common.MyLogger;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,19 +13,27 @@ import javax.servlet.http.HttpServletRequest;
 public class LogDemoController {
 
     private final LogDemoService logDemoService;
-    private final ObjectProvider<MyLogger> myLoggerProvider;
+    private final MyLogger myLogger;
 
     /**
-     * 스프링이 실행되지 않던 문제를 provider 를 통해 실제 요청이 들어온 시점에
-     * provider.getObject() 를 통해 주입받을 수 있도록 했다.
-     * 때문에 의존성이 필요할 때 주입될 수 있고, 오류 발생하지 않고 스프링이 실행될 수 있다.
+     * 코드상으로 보면 기존의 오류로 동작하지 않았던 것과 같아 보이지만,
+     * MyLogger 클래스에 ProxyMode 를 설정하게 되면서 정상적으로 실행되는 것을 볼 수 있다.
+     *
+     * 아래 soutv를 통해 myLogger 클래스를 직접 확인하면 알 수 있지만,
+     * 프록시모드를 사용하게 되면 MyLogger 클래스의 실제 기능을 동작시키기 전에는
+     * CGLIB 을 통해 MyLogger 의 가짜 프록시 클래스를 생성하고, request 가 들어오기 전에는
+     * 가짜 코드를 통해 의존성을 주입하여 의존성 주입의 문제를 해결하는 것이다.
+     *
+     * 프록시 객체에는 실제 객체를 찾아주는 로직이 들어 있고,
+     * 클라이언트가 myLogger.logic 을 호출하면 그것은 프록시 객체의 logic() 을 호출하는 것이다.
+     * 가짜 프록시 객체는 request 스코프의 원래 메소드를 호출한다.
      */
 
     @RequestMapping("log-demo")
     @ResponseBody
     public String logDemo(HttpServletRequest request) {
 
-        MyLogger myLogger = myLoggerProvider.getObject(); // 이 시점에 해당 request 에 대한 빈 생성 및 의존성 주입
+        System.out.println("myLogger = " + myLogger.getClass());
 
         String requestURL = request.getRequestURL().toString();
 
